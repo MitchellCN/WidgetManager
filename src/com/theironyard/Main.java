@@ -11,15 +11,15 @@ public class Main {
 
             int action = menuService.promptForMainMenuSelection();
 
-            if(action == MenuService.LIST_ANIMALS){
+            if(action == MenuService.LIST_WIDGETS){
 
-            } else if(action == MenuService.CREATE_ANIMAL) {
+            } else if(action == MenuService.CREATE_WIDGET) {
 
-            } else if(action == MenuService.VIEW_ANIMAL){
+            } else if(action == MenuService.VIEW_WIDGET){
 
-            } else if(action == MenuService.EDIT_ANIMAL){
+            } else if(action == MenuService.EDIT_WIDGET){
 
-            } else if(action == MenuService.DELETE_ANIMAL){
+            } else if(action == MenuService.DELETE_WIDGET){
 
             } else if(action == MenuService.QUIT){
                 // quit out of the loop

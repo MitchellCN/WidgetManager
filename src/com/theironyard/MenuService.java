@@ -7,11 +7,11 @@ import java.util.Scanner;
  */
 public class MenuService {
 
-    public static final int LIST_ANIMALS = 1;
-    public static final int CREATE_ANIMAL = 2;
-    public static final int VIEW_ANIMAL = 3;
-    public static final int EDIT_ANIMAL = 4;
-    public static final int DELETE_ANIMAL = 5;
+    public static final int LIST_WIDGETS = 1;
+    public static final int CREATE_WIDGET = 2;
+    public static final int VIEW_WIDGET = 3;
+    public static final int EDIT_WIDGET = 4;
+    public static final int DELETE_WIDGET = 5;
     public static final int QUIT = 6;
 
     Scanner scanner = new Scanner(System.in);
@@ -51,11 +51,11 @@ public class MenuService {
         System.out.println("\n" +
                 "-- Main Menu --\n" +
                 "\n" +
-                "1) List animals\n" +
-                "2) Create an animal\n" +
-                "3) View animal details\n" +
-                "4) Edit an animal\n" +
-                "5) Delete an animal\n" +
+                "1) List widgets\n" +
+                "2) Create a widget\n" +
+                "3) View widget details\n" +
+                "4) Edit a widget\n" +
+                "5) Delete a widget\n" +
                 "6) Quit \n");
 
         int choice = waitForInt("Please choose an option:");
