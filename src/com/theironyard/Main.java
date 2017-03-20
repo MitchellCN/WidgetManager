@@ -44,6 +44,7 @@ public class Main {
                     // try to read that widget
                     Widget widget = widgetService.getWidget(id);
 
+                    // display the widget
                     menuService.displayWidget(widget);
 
                 } catch(IndexOutOfBoundsException e){
@@ -81,6 +82,7 @@ public class Main {
                     // try to delete that widget
                     widgetService.deleteWidget(id);
 
+                    // print that the widget was deleted
                     menuService.printWidgetDeleted(id);
 
                 } catch(IndexOutOfBoundsException e){
