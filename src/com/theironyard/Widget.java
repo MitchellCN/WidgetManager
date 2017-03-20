@@ -11,4 +11,11 @@ public class Widget {
     public int weight;
     public int inventory;
 
+    public Widget(String name, String description, String type, int weight, int inventory) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.weight = weight;
+        this.inventory = inventory;
+    }
 }
