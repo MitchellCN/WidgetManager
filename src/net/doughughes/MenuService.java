@@ -56,6 +56,8 @@ public class MenuService {
 
     public void displayWidgetList(ArrayList<Widget> widgets) {
 
+        System.out.println("-- Widgets List --");
+
         if(widgets.size() == 0) {
             System.out.println("There are no widgets to display!");
         } else {
@@ -65,5 +67,11 @@ public class MenuService {
                 x++;
             }
         }
+    }
+
+    public void sayGoodbye() {
+
+        System.out.println("Goodbye!");
+
     }
 }

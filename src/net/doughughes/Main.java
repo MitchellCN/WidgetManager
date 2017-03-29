@@ -4,24 +4,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by doug on 3/28/17.
+ * Created by doug on 3/29/17.
  */
 public class Main {
+    public static Scanner scanner = new Scanner(System.in);
+    public static ArrayList<Widget> widgets = new ArrayList<>();
+
     public static void main(String[] args) {
 
-        MenuService menu = new MenuService(new Scanner(System.in));
-        ArrayList<Widget> widgets = new ArrayList<>();
+        MenuService menuService = new MenuService(scanner);
 
-        while(true){
 
-            int choice = menu.promptForMainMenu();
-
-            if(choice == 1){
-                menu.displayWidgetList(widgets);
-            }
-        }
-
+        menuService.promptForMainMenu();
+        menuService.displayWidgetList(widgets);
+        menuService.sayGoodbye();
     }
-
-
 }

@@ -300,6 +300,7 @@ public class MenuServiceTest {
         menu.displayWidgetList(widgets);
 
         // Assert
+        assertThat(outputStream.toString(), containsString("-- Widgets List --"));
         assertThat(outputStream.toString(), containsString("There are no widgets to display!"));
     }
 
@@ -341,6 +342,24 @@ public class MenuServiceTest {
         assertThat(outputStream.toString(), containsString("1) Roller Chain Guide"));
         assertThat(outputStream.toString(), containsString("2) Metric Ball Bearing Shim Ring"));
         assertThat(outputStream.toString(), containsString("3) Rigid Aluminum Conduit Fitting"));
+    }
+
+    @Test
+    /**
+     * When quitting
+     * Then goodbye message printed
+     */
+    public void whenQuitThenGoodbye(){
+        // Arrange
+        Scanner scanner = new Scanner("");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        menu.sayGoodbye();
+
+        // Assert
+        assertThat(outputStream.toString(), containsString("Goodbye!"));
+
     }
 
 }
