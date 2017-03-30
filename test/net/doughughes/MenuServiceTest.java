@@ -1,55 +1,19 @@
 package net.doughughes;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  * Created by doug on 3/28/17.
  */
-public class MenuServiceTest {
-
-    ByteArrayOutputStream outputStream;
-    ArrayList<Widget> widgets;
-
-    @Before
-    public void before(){
-        // setup output capturing
-        this.outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(this.outputStream);
-        System.setOut(printStream);
-
-
-        widgets = new ArrayList<>();
-        widgets.add(new Widget(
-                "Roller Chain Guide",
-                "Deep Channel for ANSI Number 40/2040, 304 Stainless Steel Frame",
-                "Deep",
-                1,
-                12));
-        widgets.add(new Widget(
-                "Metric Ball Bearing Shim Ring",
-                "for Bearing Number 38/608, 21.99mm Outside Diameter",
-                "Shim",
-                0.5,
-                3)
-        );
-        widgets.add(new Widget(
-                "Rigid Aluminum Conduit Fitting",
-                "Reducing Bushing, 3/4 x 1/2 Trade Size",
-                "Bushings",
-                0.75,
-                98
-        ));
-    }
+public class MenuServiceTest extends IOTest{
 
     @Test
     /**
@@ -119,7 +83,7 @@ public class MenuServiceTest {
         menu.promptForMainMenu();
 
         // Assert
-        assertThat(this.outputStream.toString(), containsString("-- Main Menu --"));
+        assertThat(outputStream.toString(), containsString("-- Main Menu --"));
     }
 
     @Test
@@ -346,6 +310,196 @@ public class MenuServiceTest {
 
     @Test
     /**
+     * When creating a widget
+     * Then correct prompts are displayed
+     */
+    public void whenCreatingWidgetThenPromptsDisplayed(){
+        // Arrange
+        Scanner scanner = new Scanner("Roller Chain Guide\n" +
+                "Deep Channel for ANSI Number 40/2040, 304 Stainless Steel Frame\n" +
+                "Deep\n" +
+                "1\n" +
+                "12\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        menu.createWidget();
+
+        // Assert
+
+        // validate prompts
+        assertThat(outputStream.toString(), containsString("-- Create a Widget --"));
+        assertThat(outputStream.toString(), containsString("Name: "));
+        assertThat(outputStream.toString(), containsString("Description: "));
+        assertThat(outputStream.toString(), containsString("Type: "));
+        assertThat(outputStream.toString(), containsString("Weight: "));
+        assertThat(outputStream.toString(), containsString("Quantity: "));
+    }
+
+    @Test
+    /**
+     * When creating a widget
+     * Then correct widget created
+     */
+    public void whenCreatingWidgetThenWidgetCreated(){
+        // Arrange
+        Scanner scanner = new Scanner("Roller Chain Guide\n" +
+                "Deep Channel for ANSI Number 40/2040, 304 Stainless Steel Frame\n" +
+                "Deep\n" +
+                "1\n" +
+                "12\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        Widget widget = menu.createWidget();
+
+        // Assert
+
+        // validate widget returned
+        assertThat(widget.getName(), equalTo("Roller Chain Guide"));
+        assertThat(widget.getDescription(), equalTo("Deep Channel for ANSI Number 40/2040, 304 Stainless Steel Frame"));
+        assertThat(widget.getType(), equalTo("Deep"));
+        assertThat(widget.getWeight(), equalTo(1.0));
+        assertThat(widget.getQuantity(), equalTo(12));
+    }
+
+    @Test
+    /**
+     * When creating a widget with no type
+     * Then widget created with null type
+     */
+    public void whenCreatingWidgetWithNoTypeThenWidgetCreatedWithNullType(){
+        // Arrange
+        Scanner scanner = new Scanner("Roller Chain Guide\n" +
+                "Deep Channel for ANSI Number 40/2040, 304 Stainless Steel Frame\n" +
+                "\n" +
+                "1\n" +
+                "12\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        Widget widget = menu.createWidget();
+
+        // Assert
+
+        // validate widget returned
+        assertThat(widget.getName(), equalTo("Roller Chain Guide"));
+        assertThat(widget.getDescription(), equalTo("Deep Channel for ANSI Number 40/2040, 304 Stainless Steel Frame"));
+        assertThat(widget.getType(), nullValue());
+        assertThat(widget.getWeight(), equalTo(1.0));
+        assertThat(widget.getQuantity(), equalTo(12));
+    }
+
+    // todo: test missing name
+    // todo: test missing description
+    // todo: test non-numeric weight
+    // todo: test non-numeric quantity
+
+    @Test
+    /**
+     * Given a prompt for a required string
+     * When input is empty
+     * Then error shown and user re-prompted until valid data provided
+     */
+    public void whenPromptForRequiredStringThenStringIsRequired(){
+        // Arrange
+        Scanner scanner = new Scanner("\n" +
+                "Foo Bar\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        String input = menu.promptForString("Required Prompt: ", true);
+
+        // Assert
+        assertThat(outputStream.toString(), containsString("Required Prompt: "));
+        assertThat(outputStream.toString(), containsString("This field is required. Please try again."));
+        assertThat(input, equalTo("Foo Bar"));
+    }
+
+    @Test
+    /**
+     * Given a prompt for an optional string
+     * When input is empty
+     * Then null is returned
+     */
+    public void whenPromptForOptionalStringThenEmptyStringReturnsNull(){
+        // Arrange
+        Scanner scanner = new Scanner("\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        String input = menu.promptForString("Optional Prompt: ", false);
+
+        // Assert
+        assertThat(outputStream.toString(), containsString("Optional Prompt: "));
+        assertThat(input, nullValue());
+    }
+
+
+    @Test
+    /**
+     * Given a prompt for an optional string
+     * When input is whitespace
+     * Then null is returned
+     */
+    public void whenPromptForOptionalStringThenWhiteSpaceReturnsNull(){
+        // Arrange
+        Scanner scanner = new Scanner("      \n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        String input = menu.promptForString("Whitespace Prompt: ", false);
+
+        // Assert
+        assertThat(outputStream.toString(), containsString("Whitespace Prompt: "));
+        assertThat(input, nullValue());
+    }
+
+    @Test
+    /**
+     * Given a prompt for an integer
+     * When input is not an integer
+     * Then error shown and user re-prompted until valid data provided
+     */
+    public void whenPromptForIntegerThen123IsReturned(){
+        // Arrange
+        Scanner scanner = new Scanner("test\n" +
+                "123\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        int input = menu.promptForInteger("Int Prompt: ");
+
+        // Assert
+        assertThat(outputStream.toString(), containsString("Int Prompt: "));
+        assertThat(outputStream.toString(), containsString("'test' is not a whole number. Please try again."));
+        assertThat(input, equalTo(123));
+    }
+
+    @Test
+    /**
+     * Given a prompt for an integer
+     * When 321 is input
+     * Then 321 is returned
+     */
+    public void whenPromptForIntegerThen321IsReturned(){
+        // Arrange
+        Scanner scanner = new Scanner("321\n");
+        MenuService menu = new MenuService(scanner);
+
+        // Act
+        int input = menu.promptForInteger("Enter an int: ");
+
+        // Assert
+        assertThat(outputStream.toString(), containsString("Enter an int: "));
+        assertThat(input, equalTo(321));
+    }
+
+    // todo: test integer prompt with empty string input
+
+
+    @Test
+    /**
      * When quitting
      * Then goodbye message printed
      */
@@ -359,7 +513,6 @@ public class MenuServiceTest {
 
         // Assert
         assertThat(outputStream.toString(), containsString("Goodbye!"));
-
     }
 
 }

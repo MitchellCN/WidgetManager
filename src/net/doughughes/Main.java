@@ -14,9 +14,19 @@ public class Main {
 
         MenuService menuService = new MenuService(scanner);
 
+        while(true) {
+            int selection = menuService.promptForMainMenu();
 
-        menuService.promptForMainMenu();
-        menuService.displayWidgetList(widgets);
-        menuService.sayGoodbye();
+            if(selection == 1) {
+                menuService.displayWidgetList(widgets);
+            } else if(selection == 2){
+                //menuService.createWidget();
+
+            } else if(selection == 6) {
+                menuService.sayGoodbye();
+                // leave the loop, thereby quiting the program
+                break;
+            }
+        }
     }
 }

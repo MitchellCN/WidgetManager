@@ -54,6 +54,27 @@ public class MenuService {
 
     }
 
+    public Widget createWidget() {
+        System.out.println("-- Create a Widget --");
+
+        String name = promptForString("Name: ", true);
+        String description = promptForString("Description: ", true);
+        String type = promptForString("Type: ", false);
+
+        System.out.println("Weight: ");
+        double weight = scanner.nextDouble();
+
+        System.out.println("Quantity: ");
+        int quantity = scanner.nextInt();
+
+        return new Widget(name,
+                description,
+                type,
+                weight,
+                quantity);
+    }
+
+
     public void displayWidgetList(ArrayList<Widget> widgets) {
 
         System.out.println("-- Widgets List --");
@@ -72,6 +93,40 @@ public class MenuService {
     public void sayGoodbye() {
 
         System.out.println("Goodbye!");
+
+    }
+
+    protected String promptForString(String prompt, boolean required) {
+        System.out.println(prompt);
+
+        String input = scanner.nextLine().trim();
+
+        // is the field required but empty?
+        if(required && input.equals("")) {
+            // show an error and re-prompt
+            System.out.println("This field is required. Please try again.");
+            return promptForString(prompt, required);
+
+        } else if(input.length() == 0){
+            // return null if it's not required and empty
+            return null;
+
+        } else {
+            // return the value input
+            return input;
+        }
+    }
+
+    public int promptForInteger(String prompt) {
+        System.out.println(prompt);
+
+        if(!scanner.hasNextInt()){
+            System.out.printf("'%s' is not a whole number. Please try again.", scanner.nextLine());
+
+            return promptForInteger(prompt);
+        } else {
+            return scanner.nextInt();
+        }
 
     }
 }
